@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebasematerial/view/add_contact.dart';
 import 'package:firebasematerial/view/contact.dart';
+import 'package:firebasematerial/view/login.dart';
+import 'package:firebasematerial/view/register.dart';
 import 'package:flutter/material.dart';
 
 Future main() async {
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const Contact()
+      home: const Login()
     );
   }
 }
