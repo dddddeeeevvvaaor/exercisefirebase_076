@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebasematerial/controller/contact_controller.dart';
 import 'package:firebasematerial/model/contact_model.dart';
 import 'package:firebasematerial/view/add_contact.dart';
 import 'package:firebasematerial/view/edit_contact.dart';
+import 'package:firebasematerial/view/login.dart';
 import 'package:flutter/material.dart';
 
 class Contact extends StatefulWidget {
-  const Contact({super.key});
+  const Contact({Key? key});
 
   @override
   State<Contact> createState() => _ContactState();
@@ -15,34 +17,71 @@ class Contact extends StatefulWidget {
 class _ContactState extends State<Contact> {
   var cc = ContactController();
 
+  Future<void> _logout() async {
+    await FirebaseAuth.instance.signOut();
+    // ignore: use_build_context_synchronously
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const Login()),
+      (route) => false,
+    );
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
-    cc.getContact();
     super.initState();
+    cc.getContact();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //menambahkan logout
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  width: 130,
-                  height: 100,
-                  child: Image.network('https://i.imgur.com/uRCRG.jpg'),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.indigo.shade400, Colors.indigo.shade700],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
-                const SizedBox(width: 40), // Jarak antara gambar dan teks
-                const Text(
-                  'Contact',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
                 ),
-              ],
+              ),
+              child: Row(
+                children: [
+                  const CircleAvatar(
+                    radius: 25,
+                    backgroundImage:
+                        NetworkImage('https://i.imgur.com/uRCRG.jpg'),
+                  ),
+                  const SizedBox(width: 10),
+                  const Text(
+                    'Contact',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      _logout();
+                    },
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: StreamBuilder<List<DocumentSnapshot>>(
@@ -53,16 +92,16 @@ class _ContactState extends State<Contact> {
                       child: CircularProgressIndicator(),
                     );
                   }
-
                   final List<DocumentSnapshot> data = snapshot.data!;
-
                   return ListView.builder(
                     itemCount: data.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
                         child: InkWell(
-                          onLongPress: () {
+                          borderRadius: BorderRadius.circular(10),
+                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -76,6 +115,9 @@ class _ContactState extends State<Contact> {
                           },
                           child: Card(
                             elevation: 8,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             child: ListTile(
                               leading: CircleAvatar(
                                 backgroundColor: Colors.blue,
@@ -84,14 +126,25 @@ class _ContactState extends State<Contact> {
                                       .substring(0, 1)
                                       .toUpperCase(),
                                   style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                              title: Text(data[index]['name']),
-                              subtitle: Text(data[index]['phone']),
-                              //membuat iconbutton untuk edit data
-                              //jika data dihapus maka akan mereload data dan membuat pilihan untuk menghapus data yes or no dan snackbar untuk notifikasi data berhasil dihapus dan buatkan edit data
+                              title: Text(
+                                data[index]['name'],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              subtitle: Text(
+                                data[index]['phone'],
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 14,
+                                ),
+                              ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.delete),
                                 color: Colors.red,
@@ -100,9 +153,15 @@ class _ContactState extends State<Contact> {
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
-                                        title: const Text('Delete Data'),
+                                        title: const Text(
+                                          'Delete Data',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                         content: const Text(
-                                            'Are you sure want to delete this data?'),
+                                          'Are you sure you want to delete this data?',
+                                        ),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
@@ -111,21 +170,33 @@ class _ContactState extends State<Contact> {
                                               Navigator.pop(context);
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
-                                                const SnackBar(
+                                                SnackBar(
                                                   content: Text(
-                                                      //teks data nama yang dihapus
-                                                      'Data berhasil dihapus'),
+                                                    'Data ${data[index]['name']} berhasil dihapus',
+                                                  ),
                                                   backgroundColor: Colors.red,
                                                 ),
                                               );
                                             },
-                                            child: const Text('Yes'),
+                                            child: const Text(
+                                              'Yes',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
                                           ),
                                           TextButton(
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            child: const Text('No'),
+                                            child: const Text(
+                                              'No',
+                                              style: TextStyle(
+                                                color: Colors.blue,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       );
@@ -141,7 +212,7 @@ class _ContactState extends State<Contact> {
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -150,11 +221,16 @@ class _ContactState extends State<Contact> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: ((context) => const AddContact()),
+              builder: (context) => const AddContact(),
             ),
           );
         },
-        child: const Icon(Icons.add),
+        // ignore: sort_child_properties_last
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.indigo,
       ),
     );
   }
