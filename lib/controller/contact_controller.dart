@@ -36,10 +36,35 @@ class ContactController {
 
   Future<void> deleteContact(String id) async {
     await contactCollection.doc(id).delete();
+    await getContact();
+
+    
   }
 
   //membuat fungsi untuk mengedit data
-  Future<void> updateContact(ContactModel ctmodel) async {
-    await contactCollection.doc(ctmodel.id).update(ctmodel.toMap());
+  Future<void> updateContact(ContactModel contactModel) async {
+  await contactCollection.doc(contactModel.id).update(contactModel.toMap());
+  }
+
+
+  Future updateContact2(String docId, ContactModel contactModel) async {
+    final ContactModel updateContactModel = ContactModel(
+      id: docId,
+      name: contactModel.name,
+      phone: contactModel.phone,
+      email: contactModel.email,
+      address: contactModel.address,
+    );
+
+    final DocumentSnapshot documentSnapshot =
+        await contactCollection.doc(docId).get();
+        if (!documentSnapshot.exists) {
+          print('Document with ID $docId does not exist');
+          return;
+        }
+        final updatedContact = updateContactModel.toMap();
+        await contactCollection.doc(docId).update(updatedContact);
+        await getContact();
+        print('Updated contact with ID: $docId');
   }
 }
