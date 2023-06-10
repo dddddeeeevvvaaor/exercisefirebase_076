@@ -40,6 +40,7 @@ class _AddContactState extends State<AddContact> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              //membuat validasi nama gak boleh kosong
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Name',
@@ -51,13 +52,22 @@ class _AddContactState extends State<AddContact> {
                   border: OutlineInputBorder(),
                 ),
                 style: const TextStyle(fontSize: 18),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Name is required';
+                  }
+                  return null;
+                },
                 onChanged: (value) {
-                  setState(() {
-                    name = value;
-                  });
+                  setState(
+                    () {
+                      name = value;
+                    },
+                  );
                 },
               ),
               const SizedBox(height: 16),
+              //membuat validasi phone gak boleh kosong
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Phone',
@@ -69,6 +79,12 @@ class _AddContactState extends State<AddContact> {
                   border: OutlineInputBorder(),
                 ),
                 style: const TextStyle(fontSize: 18),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Phone is required';
+                  }
+                  return null;
+                },
                 onChanged: (value) {
                   setState(
                     () {
@@ -78,6 +94,7 @@ class _AddContactState extends State<AddContact> {
                 },
               ),
               const SizedBox(height: 16),
+              //membuat validasi phone gak boleh kosong
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Email',
@@ -89,6 +106,12 @@ class _AddContactState extends State<AddContact> {
                   border: OutlineInputBorder(),
                 ),
                 style: const TextStyle(fontSize: 18),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email is required';
+                  }
+                  return null;
+                },
                 onChanged: (value) {
                   setState(
                     () {
@@ -98,6 +121,7 @@ class _AddContactState extends State<AddContact> {
                 },
               ),
               const SizedBox(height: 16),
+              //membuat validasi phone gak boleh kosong
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Address',
@@ -109,6 +133,12 @@ class _AddContactState extends State<AddContact> {
                   border: OutlineInputBorder(),
                 ),
                 style: const TextStyle(fontSize: 18),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Address is required';
+                  }
+                  return null;
+                },
                 onChanged: (value) {
                   setState(
                     () {

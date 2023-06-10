@@ -4,6 +4,7 @@ import 'package:firebasematerial/model/contact_model.dart';
 import 'package:firebasematerial/view/contact.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class EditContact extends StatefulWidget {
   ContactModel contactModel;
   EditContact({
@@ -38,6 +39,7 @@ class _EditContactState extends State<EditContact> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              //membuat validasi nama gak boleh kosong
               TextFormField(
                 controller: TextEditingController(
                   text: widget.contactModel.name,
@@ -53,9 +55,17 @@ class _EditContactState extends State<EditContact> {
                         BorderSide(color: Colors.indigo.withOpacity(0.5)),
                   ),
                 ),
+                style: const TextStyle(fontSize: 18),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Name is required';
+                  }
+                  return null;
+                },
                 onChanged: (value) => name = value,
               ),
               const SizedBox(height: 10),
+              //membuat validasi phone gak boleh kosong
               TextFormField(
                 controller: TextEditingController(
                   text: widget.contactModel.phone,
@@ -71,9 +81,17 @@ class _EditContactState extends State<EditContact> {
                         BorderSide(color: Colors.indigo.withOpacity(0.5)),
                   ),
                 ),
+                style: const TextStyle(fontSize: 18),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Phone is required';
+                  }
+                  return null;
+                },
                 onChanged: (value) => phone = value,
               ),
               const SizedBox(height: 10),
+              //membuat validasi email gak boleh kosong
               TextFormField(
                 controller: TextEditingController(
                   text: widget.contactModel.email,
@@ -89,9 +107,17 @@ class _EditContactState extends State<EditContact> {
                         BorderSide(color: Colors.indigo.withOpacity(0.5)),
                   ),
                 ),
+                style: const TextStyle(fontSize: 18),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email is required';
+                  }
+                  return null;
+                },
                 onChanged: (value) => email = value,
               ),
               const SizedBox(height: 10),
+              //membuat validasi address gak boleh kosong
               TextFormField(
                 controller: TextEditingController(
                   text: widget.contactModel.address,
@@ -107,10 +133,18 @@ class _EditContactState extends State<EditContact> {
                         BorderSide(color: Colors.indigo.withOpacity(0.5)),
                   ),
                 ),
+                style: const TextStyle(fontSize: 18),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Address is required';
+                  }
+                  return null;
+                },
                 onChanged: (value) => address = value,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                // ignore: sort_child_properties_last
                 child: const Text(
                   'Update Contact',
                   style: TextStyle(fontSize: 16),
