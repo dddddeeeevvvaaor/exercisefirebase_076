@@ -29,54 +29,96 @@ class _EditContactState extends State<EditContact> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Update Contact'),
+        backgroundColor: Colors.indigo,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(20.0),
         child: Form(
           key: formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
                 controller: TextEditingController(
                   text: widget.contactModel.name,
                 ),
-                decoration: const InputDecoration(
-                  hintText: 'Name',
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  labelStyle: const TextStyle(color: Colors.indigo),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.indigo),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.indigo.withOpacity(0.5)),
+                  ),
                 ),
                 onChanged: (value) => name = value,
               ),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: TextEditingController(
                   text: widget.contactModel.phone,
                 ),
-                decoration: const InputDecoration(
-                  hintText: 'Phone',
+                decoration: InputDecoration(
+                  labelText: 'Phone',
+                  labelStyle: const TextStyle(color: Colors.indigo),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.indigo),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.indigo.withOpacity(0.5)),
+                  ),
                 ),
                 onChanged: (value) => phone = value,
               ),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: TextEditingController(
                   text: widget.contactModel.email,
                 ),
-                decoration: const InputDecoration(
-                  hintText: 'Email',
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: const TextStyle(color: Colors.indigo),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.indigo),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.indigo.withOpacity(0.5)),
+                  ),
                 ),
                 onChanged: (value) => email = value,
               ),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: TextEditingController(
                   text: widget.contactModel.address,
                 ),
-                decoration: const InputDecoration(
-                  hintText: 'Address',
+                decoration: InputDecoration(
+                  labelText: 'Address',
+                  labelStyle: const TextStyle(color: Colors.indigo),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.indigo),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.indigo.withOpacity(0.5)),
+                  ),
                 ),
                 onChanged: (value) => address = value,
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 20),
               ElevatedButton(
-                child: const Text('Update Contact'),
+                child: const Text(
+                  'Update Contact',
+                  style: TextStyle(fontSize: 16),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.indigo,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                ),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     ContactModel cm = ContactModel(
