@@ -4,15 +4,15 @@ import 'package:firebasematerial/view/contact.dart';
 import 'package:flutter/material.dart';
 
 class AddContact extends StatefulWidget {
-  const AddContact({super.key});
+  const AddContact({Key? key}) : super(key: key);
 
   @override
-  State<AddContact> createState() => _AddContactState();
+  _AddContactState createState() => _AddContactState();
 }
 
 class _AddContactState extends State<AddContact> {
   var contactController = ContactController();
-  final formkey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   String? name;
   String? phone;
@@ -23,64 +23,115 @@ class _AddContactState extends State<AddContact> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Contact'),
+        title: const Text(
+          'Add Contact',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.indigo,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
+      body: Container(
+        padding: const EdgeInsets.all(24),
         child: Form(
-          key: formkey,
+          key: formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
-                  decoration: InputDecoration(hintText: 'Name'),
-                  onChanged: (value) {
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                  labelStyle: TextStyle(
+                    color: Colors.indigo,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+                style: const TextStyle(fontSize: 18),
+                onChanged: (value) {
+                  setState(() {
                     name = value;
-                  }),
-              TextFormField(
-                decoration: InputDecoration(hintText: 'Phone'),
-                onChanged: (value) {
-                  phone = value;
+                  });
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Email'),
+                decoration: const InputDecoration(
+                  labelText: 'Phone',
+                  labelStyle: TextStyle(
+                    color: Colors.indigo,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+                style: const TextStyle(fontSize: 18),
                 onChanged: (value) {
-                  email = value;
+                  setState(
+                    () {
+                      phone = value;
+                    },
+                  );
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Address'),
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: TextStyle(
+                    color: Colors.indigo,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+                style: const TextStyle(fontSize: 18),
                 onChanged: (value) {
-                  address = value;
+                  setState(
+                    () {
+                      email = value;
+                    },
+                  );
                 },
               ),
-              //jika data ditambahkan maka akan diarahkan ke halaman contact dan data akan ditambahkan ke firebase dan ditampilkan di halaman contact kemudian halaman contact akan di refresh
-              /*ElevatedButton(
-                child: Text('Add Contact'),
-                onPressed: () {
-                  if (formkey.currentState!.validate()) {
-                    print('validated');
-                  } else {
-                    print('not validated');
-                  }
-                  contactController.addContact(ContactModel(
-                    name: name!,
-                    phone: phone!,
-                    email: email!,
-                    address: address!,
-                  ));
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Contact(),
-                      ),
-                      (route) => false);
+              const SizedBox(height: 16),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Address',
+                  labelStyle: TextStyle(
+                    color: Colors.indigo,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  border: OutlineInputBorder(),
+                ),
+                style: const TextStyle(fontSize: 18),
+                onChanged: (value) {
+                  setState(
+                    () {
+                      address = value;
+                    },
+                  );
                 },
-              ),*/
+              ),
+              const SizedBox(height: 24),
               ElevatedButton(
-                child: const Text('Add Contact'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.indigo,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text(
+                  'Add Contact',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 onPressed: () {
-                  if (formkey.currentState!.validate()) {
+                  if (formKey.currentState!.validate()) {
                     ContactModel cm = ContactModel(
                       name: name!,
                       phone: phone!,
@@ -88,24 +139,29 @@ class _AddContactState extends State<AddContact> {
                       address: address!,
                     );
 
-                    contactController.addContact(cm).then((_) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Contact()),
-                      );
+                    contactController.addContact(cm).then(
+                      (_) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Contact()),
+                        );
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Contact Added'),
-                          duration: Duration(seconds: 1),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Contact Added',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            duration: Duration(seconds: 2),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      },
+                    );
                   }
                 },
-              )
+              ),
             ],
           ),
         ),
